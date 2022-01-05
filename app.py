@@ -28,7 +28,7 @@ class UserSchema(ma.Schema):
 
 user_schema = UserSchema()
 multi_user_schema = UserSchema(many=True)
-
+# /////////ADD-User-Endpoint//////////////////////////////////////////////////
 @app.route("/user/add", methods=["POST"])
 def add_user():
     if request.content_type != "application/json":
@@ -45,7 +45,7 @@ def add_user():
     db.session.commit()
 
     return jsonify(user_schema.dump(new_record))
-
+# ////////////Verify Endpoint/////////////////////////////////////////////////
 @app.route("/user/verification", methods=["POST"])
 def verification():
     if request.content_type != "application/json":
@@ -64,7 +64,11 @@ def verification():
         return jsonify("User could not be Verfied!")
 
     return jsonify("User Verified")
-
+# ///////////////Get-DB-Items/////////////////////////////////////////////////
+@app.route("/user/get", methods=["GET"])
+def get_all_users():
+    all_users = db.session.query(User).all()
+    return jsonify(multi_user_schema.dump(all_users))
 
 
 
