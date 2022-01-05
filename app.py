@@ -3,7 +3,6 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from flask_cors import CORS
 from flask_bcrypt import Bcrypt
-import os
 
 app = Flask(__name__)
 
@@ -47,6 +46,24 @@ def add_user():
 
     return jsonify(user_schema.dump(new_record))
 
+@app.route("/user/verification", methods=["POST"])
+def verification():
+    if request.content_type != "application/json":
+        return jsonify("ERROR: Check your headers!")
+
+    post_data = request.get_json()
+    username = post_data.get("username")
+    pasword = post_data.get("password")
+
+    user = db.session.query(User).filter(User.username == username).first()
+
+    if user is None:
+        return jsonify("Username does not match any records")
+
+    if not bcrypt.check_password_hash(user.password, password):
+        return jsonify("Password is Incorrect")
+
+    return jsonify("User Verified")
 
 
 
