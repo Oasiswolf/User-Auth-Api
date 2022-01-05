@@ -70,6 +70,16 @@ def get_all_users():
     all_users = db.session.query(User).all()
     return jsonify(multi_user_schema.dump(all_users))
 
+# ///////////////Delete-User-Item////////////////////////////////////////////
+@app.route("/user/delete/id", methods=["DELETE"])
+def delete_user(id):
+    user_to_delete = db.session.query(User).filter(User.id == id).first()
+    db.session.delete(user_to_delete)
+    db.session.commit()
+    return jsonify(user_schema.dump(user_to_delete))
+
+# ///////////////Update-Password/////////////////////////////////////////////
+@app.route("/user/update/id")
 
 
 
