@@ -4,7 +4,12 @@ from flask_marshmallow import Marshmallow
 from flask_cors import CORS
 from flask_bcrypt import Bcrypt
 
+# import os
+
 app = Flask(__name__)
+
+# basedir = os.path.abspath(os.path.dirname(__file__))
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'app.sqlite')
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://ebekbnqstmzevt:74542a02892b2648e8ffef3d909512f53364457780a4ae2b90599242fa7818c0@ec2-54-172-219-6.compute-1.amazonaws.com:5432/d8jmimnp8m6a61'
 
@@ -20,7 +25,7 @@ class User(db.Model):
 
     def __init__(self, username, password):
         self.username = username
-        self.password = passsword
+        self.password = password
 
 class UserSchema(ma.Schema):
     class Meta:
@@ -53,7 +58,7 @@ def verification():
 
     post_data = request.get_json()
     username = post_data.get("username")
-    pasword = post_data.get("password")
+    password = post_data.get("password")
 
     user = db.session.query(User).filter(User.username == username).first()
 
@@ -71,7 +76,7 @@ def get_all_users():
     return jsonify(multi_user_schema.dump(all_users))
 
 # ///////////////Delete-User-Item////////////////////////////////////////////
-@app.route("/user/delete/id", methods=["DELETE"])
+@app.route("/user/delete/<id>", methods=["DELETE"])
 def delete_user(id):
     user_to_delete = db.session.query(User).filter(User.id == id).first()
     db.session.delete(user_to_delete)
