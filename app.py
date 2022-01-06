@@ -83,7 +83,7 @@ def delete_user(id):
 
 
 
-# dang heroku
+# dang heroku still messed up
 
 
 
