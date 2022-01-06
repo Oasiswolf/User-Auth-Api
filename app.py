@@ -79,7 +79,7 @@ def delete_user(id):
     return jsonify(user_schema.dump(user_to_delete))
 
 # ///////////////Update-Password/////////////////////////////////////////////
-@app.route("/user/update/id")
+# @app.route("/user/update/id")
 
 
 
