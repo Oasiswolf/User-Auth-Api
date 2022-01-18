@@ -22,14 +22,16 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     username = db.Column(db.String, nullable = False, unique = True)
     password = db.Column(db.String, nullable = False)
+    email = db.Column(db.String, nullable = False)
 
-    def __init__(self, username, password):
+    def __init__(self, username, password, email):
         self.username = username
         self.password = password
+        self.email = email
 
 class UserSchema(ma.Schema):
     class Meta:
-        fields = ("username", "password")
+        fields = ("username", "password", "email")
 
 user_schema = UserSchema()
 multi_user_schema = UserSchema(many=True)
@@ -42,10 +44,11 @@ def add_user():
     post_data = request.get_json()
     username = post_data.get("username")
     password = post_data.get("password")
+    email = post_data.get("email")
 
     pw_hash = bcrypt.generate_password_hash(password).decode('utf-8')
         
-    new_record = User(username, pw_hash)
+    new_record = User(username, pw_hash, email)
     db.session.add(new_record)
     db.session.commit()
 
@@ -84,7 +87,30 @@ def delete_user(id):
     return jsonify(user_schema.dump(user_to_delete))
 
 # ///////////////Update-Password/////////////////////////////////////////////
-# @app.route("/user/update/id")
+@app.route("/user/update/id")
+def update_signIn(id):
+    if request.content_type != 'appilcation/json':
+        return jsonify("Error: Data must be sent in JSON!")
+
+    put_data = request.get_json()
+    username = put_data.get("username")
+    email = put_data.get("email")
+    password = request.get_json().get("password")
+    user = db.session.query(User).filter(User.id == id).first()
+    pw_hash = bcrypt.generate_password_hash(password).decode('utf-8')
+    user.password = pw_hash
+
+    user_to_update = db.session.query(User).filter(User.id == id).first()
+
+    if username != None:
+        user_to_update.username = username
+    if email != None:
+        user_to_update.email = email
+    if password != None:
+        user_to_update.password = password
+
+    db.session.commit()
+    return jsonify(user_schema.dump(user))
 
 
 
