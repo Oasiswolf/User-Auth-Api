@@ -95,24 +95,30 @@ def update_signIn(id):
     put_data = request.get_json()
     username = put_data.get("username")
     email = put_data.get("email")
-    password = request.get_json().get("password")
-    user = db.session.query(User).filter(User.id == id).first()
-    pw_hash = bcrypt.generate_password_hash(password).decode('utf-8')
-    user.password = pw_hash
-
+    
     user_to_update = db.session.query(User).filter(User.id == id).first()
 
     if username != None:
         user_to_update.username = username
     if email != None:
         user_to_update.email = email
-    if password != None:
-        user_to_update.password = password
 
     db.session.commit()
     return jsonify(user_schema.dump(user))
 
+@app.route("/user/pwupdate/<id>", methods=["PUT"])
+def update_password(id):
+    if request.content_type != "application/json":
+        return jsonify("Error: Data must be sent as JSON")
 
+    password = request.get_json().get("password")
+    user = db.session.query(User).filter(User.id == id).first()
+    pw_hash = bcrypt.generate_password_hash(password).decode('utf-8')
+    user.password = pw_hash
+
+    db.session.commit()
+
+    return jsonify(user_schema.dump(user))
 
 
 
