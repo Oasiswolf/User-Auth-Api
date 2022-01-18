@@ -87,7 +87,7 @@ def delete_user(id):
     return jsonify(user_schema.dump(user_to_delete))
 
 # ///////////////Update-Password/////////////////////////////////////////////
-@app.route("/user/update/<id>")
+@app.route("/user/update/<id>", methods=["PUT"])
 def update_signIn(id):
     if request.content_type != 'appilcation/json':
         return jsonify("Error: Data must be sent in JSON!")
