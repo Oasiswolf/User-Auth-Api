@@ -104,7 +104,7 @@ def update_signIn(id):
         user_to_update.email = email
 
     db.session.commit()
-    return jsonify(user_schema.dump(user))
+    return jsonify(user_schema.dump(user_to_update))
 
 @app.route("/user/pwupdate/<id>", methods=["PUT"])
 def update_password(id):
