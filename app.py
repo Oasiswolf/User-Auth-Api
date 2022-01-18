@@ -4,14 +4,14 @@ from flask_marshmallow import Marshmallow
 from flask_cors import CORS
 from flask_bcrypt import Bcrypt
 
-import os
+# import os
 
 app = Flask(__name__)
 
-basedir = os.path.abspath(os.path.dirname(__file__))
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'app.sqlite')
+# basedir = os.path.abspath(os.path.dirname(__file__))
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'app.sqlite')
 
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://tnvbjdkvfcfyes:b993696e260c8e0f318f82a03eaf67d4abcaecc0b323aa75c97ba7d89179db7c@ec2-54-211-74-66.compute-1.amazonaws.com:5432/d4jdiho27n6p61'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://sgcffmycucxcsc:1b1e69c04941c1410e10efe24d37879b68dc1acf2b29be0ec412b75e7efe7a54@ec2-54-161-239-198.compute-1.amazonaws.com:5432/dffrpm7bsecqt'
 
 db = SQLAlchemy(app)
 ma = Marshmallow(app)
@@ -88,7 +88,7 @@ def delete_user(id):
 
 
 
-# dang heroku still messed up
+
 
 
 
